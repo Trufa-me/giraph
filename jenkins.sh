@@ -8,7 +8,9 @@ SNAPSHOT=$(echo ${VERSION} | grep -o SNAPSHOT)
 
 if [ "${SNAPSHOT}" == "SNAPSHOT" ]
 then
-    mvn -DaltDeploymentRepository=private-nexus-snapshots::default::http://pilot.eldorado.trufa.local:8081/repository/maven-snapshots -Dmaven.test.skip=true deploy
+    DEPLOYMENT_REPO=private-nexus-snapshots::default::http://pilot.eldorado.trufa.local:8081/repository/maven-snapshots
 else
-    mvn -DaltDeploymentRepository=private-nexus::default::http://pilot.eldorado.trufa.local:8081/repository/maven-releases -Dmaven.test.skip=true deploy
+    DEPLOYMENT_REPO=private-nexus::default::http://pilot.eldorado.trufa.local:8081/repository/maven-releases
 fi
+
+mvn -DaltDeploymentRepository=${DEPLOYMENT_REPO} -Dmaven.test.skip=true -Phadoop_yarn -Dhadoop.version=2.7.2 clean compile deploy
