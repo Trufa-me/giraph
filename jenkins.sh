@@ -18,13 +18,13 @@ fi
 mvn -Dmaven.test.skip=true -Phadoop_yarn -Dhadoop.version=2.7.2 clean compile
 
 mvn deploy:deploy-file -Durl=${NEXUS_URL} \
-                       -DrepositoryId=${REPO_ID} \
-                       -Dfile=./target/giraph-${VERSION}-for-hadoop-2.7.2-jar-with-dependencies.jar \
-                       -DgroupId=org.apache.giraph \
-                       -DartifactId=giraph-core \
-                       -Dversion=${VERSION} \
-                       -Dpackaging=jar \
-                       -Dclassifier=savanna \
-                       -DgeneratePom=true \
-                       -DgeneratePom.description="Custom Apache Giraph build for savanna project" \
-                       -DrepositoryLayout=default
+    -DrepositoryId=${REPO_ID} \
+    -Dfile=./target/giraph-${VERSION}-for-hadoop-2.7.2-jar-with-dependencies.jar \
+    -DgroupId=org.apache.giraph \
+    -DartifactId=giraph-core \
+    -Dversion=${VERSION} \
+    -Dpackaging=jar \
+    -Dclassifier=savanna \
+    -DgeneratePom=true \
+    -DgeneratePom.description="Custom Apache Giraph build for savanna project" \
+    -DrepositoryLayout=default
