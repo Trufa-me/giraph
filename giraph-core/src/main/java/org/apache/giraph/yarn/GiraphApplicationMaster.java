@@ -408,8 +408,8 @@ public class GiraphApplicationMaster {
     giraphConf.setInt(MRJobConfig.APPLICATION_ATTEMPT_ID,
       appAttemptId.getAttemptId());
     // now republish the giraph-conf.xml in HDFS
-    YarnUtils.exportGiraphConfiguration(giraphConf,
-      appAttemptId.getApplicationId());
+//    YarnUtils.exportGiraphConfiguration(giraphConf,
+//      appAttemptId.getApplicationId());
   }
 
   /**
@@ -528,20 +528,25 @@ public class GiraphApplicationMaster {
      * @return the BASH shell commands to launch the job.
      */
     private List<String> generateShellExecCommand() {
-      return ImmutableList.of("java " +
-        "-Xmx" + heapPerContainer + "M " +
-        "-Xms" + heapPerContainer + "M " +
-        "-cp .:${CLASSPATH} " +
-        "org.apache.giraph.yarn.GiraphYarnTask " +
-        appAttemptId.getApplicationId().getClusterTimestamp() + " " +
-        appAttemptId.getApplicationId().getId() + " " +
-        container.getId().getId() + " " +
-        appAttemptId.getAttemptId() + " " +
-        "1>" + ApplicationConstants.LOG_DIR_EXPANSION_VAR +
-        "/task-" + container.getId().getId() + "-stdout.log " +
-        "2>" + ApplicationConstants.LOG_DIR_EXPANSION_VAR +
-        "/task-" + container.getId().getId() + "-stderr.log "
-      );
+      ImmutableList.Builder<String> builder = ImmutableList.builder();
+      builder.add("java " +
+          "-Xmx" + heapPerContainer + "M " +
+          "-Xms" + heapPerContainer + "M ");
+
+      // add any extra java options, eg jmx settings, agent libraries, etc
+      builder.add(giraphConf.extraJavaOptions() + " ");
+
+      builder.add("-cp .:${CLASSPATH} " +
+          "org.apache.giraph.yarn.GiraphYarnTask " +
+          appAttemptId.getApplicationId().getClusterTimestamp() + " " +
+          appAttemptId.getApplicationId().getId() + " " +
+          container.getId().getId() + " " +
+          appAttemptId.getAttemptId() + " " +
+          "1>" + ApplicationConstants.LOG_DIR_EXPANSION_VAR +
+          "/task-" + container.getId().getId() + "-stdout.log " +
+          "2>" + ApplicationConstants.LOG_DIR_EXPANSION_VAR +
+          "/task-" + container.getId().getId() + "-stderr.log ");
+      return builder.build();
     }
 
     /**

@@ -18,6 +18,7 @@
 
 package org.apache.giraph.metrics;
 
+import com.yammer.metrics.reporting.GraphiteReporter;
 import org.apache.giraph.conf.GiraphConfiguration;
 
 import com.yammer.metrics.core.Counter;
@@ -83,8 +84,34 @@ public class GiraphMetricsRegistry {
    * @return new metrics registry
    */
   public static GiraphMetricsRegistry createWithOptional(String groupName,
-    String type) {
+      String type) {
     MetricsRegistry registry = new MetricsRegistry();
+    return new GiraphMetricsRegistry(registry, new JmxReporter(registry),
+        groupName, type);
+  }
+
+  /**
+   * Create registry with group to use for metrics.
+   *
+   * @param conf GiraphConfiguration to use (may contain metric reporting
+   *             settings)
+   * @param groupName String group to use for metrics.
+   * @param type String type to use for metrics.
+   * @return new metrics registry
+   */
+  public static GiraphMetricsRegistry createWithConf(
+      GiraphConfiguration conf, String groupName, String type) {
+    MetricsRegistry registry = new MetricsRegistry();
+
+    String graphiteHost = conf.metricsGraphiteHost().trim();
+    if (graphiteHost.length() > 0) {
+      String prefix = conf.metricsGraphitePrefix() + "." +
+          conf.getInt("mapred.task.partition", 1);
+      GraphiteReporter.enable(registry, (long)conf.metricsGraphitePeriod(),
+          TimeUnit.SECONDS, graphiteHost, conf.metricsGraphitePort(),
+          prefix);
+    }
+
     return new GiraphMetricsRegistry(registry, new JmxReporter(registry),
         groupName, type);
   }
@@ -102,7 +129,7 @@ public class GiraphMetricsRegistry {
   public static GiraphMetricsRegistry create(GiraphConfiguration conf,
     String groupName, String type) {
     if (conf.metricsEnabled()) {
-      return createWithOptional(groupName, type);
+      return createWithConf(conf, groupName, type);
     } else {
       return createFake();
     }

@@ -210,7 +210,8 @@ public class GiraphJob {
 
     // Set the ping interval to 5 minutes instead of one minute
     // (DEFAULT_PING_INTERVAL)
-    Client.setPingInterval(giraphConfiguration, 60000 * 5);
+//    Client.setPingInterval(giraphConfiguration, 60000 * 5);
+    giraphConfiguration.setInt("ipc.ping.interval", 60000 * 5);
 
     // Should work in MAPREDUCE-1938 to let the user jars/classes
     // get loaded first

@@ -433,7 +433,13 @@ public class GiraphYarnClient {
    */
   private List<String> buildAppMasterExecCommand() {
     // 'gam-' prefix is for GiraphApplicationMaster in log file names
-    return ImmutableList.of("${JAVA_HOME}/bin/java " +
+    ImmutableList.Builder<String> builder = ImmutableList.builder();
+    builder.add("${JAVA_HOME}/bin/java ");
+    if (giraphConf.applicationMasterDebugPort() != 0) {
+      builder.add("-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=" +
+          giraphConf.applicationMasterDebugPort() + " ");
+    }
+    builder.add(
       "-Xmx" + YARN_APP_MASTER_MEMORY_MB + "M " +
       "-Xms" + YARN_APP_MASTER_MEMORY_MB + "M " + // TODO: REMOVE examples jar!
       //TODO: Make constant
@@ -441,6 +447,7 @@ public class GiraphYarnClient {
       "1>" + ApplicationConstants.LOG_DIR_EXPANSION_VAR + "/gam-stdout.log " +
       "2>" + ApplicationConstants.LOG_DIR_EXPANSION_VAR + "/gam-stderr.log "
     );
+    return builder.build();
   }
 
   /**
