@@ -8,9 +8,23 @@ SNAPSHOT=$(echo ${VERSION} | grep -o SNAPSHOT)
 
 if [ "${SNAPSHOT}" == "SNAPSHOT" ]
 then
-    DEPLOYMENT_REPO=private-nexus-snapshots::default::http://pilot.eldorado.trufa.local:8081/repository/maven-snapshots
+    REPO_ID=private-nexus-snapshots
+    NEXUS_URL=http://pilot.eldorado.trufa.local:8081/repository/maven-snapshots
 else
-    DEPLOYMENT_REPO=private-nexus::default::http://pilot.eldorado.trufa.local:8081/repository/maven-releases
+    REPO_ID=private-nexus
+    NEXUS_URL=http://pilot.eldorado.trufa.local:8081/repository/maven-releases
 fi
 
-mvn -DaltDeploymentRepository=${DEPLOYMENT_REPO} -Dmaven.test.skip=true -Phadoop_yarn -Dhadoop.version=2.7.2 clean compile deploy
+mvn -Dmaven.test.skip=true -Phadoop_yarn -Dhadoop.version=2.7.2 clean compile
+
+mvn deploy:deploy-file -Durl=${NEXUS_URL} \
+                       -DrepositoryId=${REPO_ID} \
+                       -Dfile=./target/giraph-${VERSION}-for-hadoop-2.7.2-jar-with-dependencies.jar \
+                       -DgroupId=org.apache.giraph \
+                       -DartifactId=giraph-core \
+                       -Dversion=${VERSION} \
+                       -Dpackaging=jar \
+                       -Dclassifier=savanna \
+                       -DgeneratePom=true \
+                       -DgeneratePom.description="Custom Apache Giraph build for savanna project" \
+                       -DrepositoryLayout=default
