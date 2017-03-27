@@ -25,7 +25,6 @@ import org.apache.giraph.conf.GiraphConstants;
 import org.apache.giraph.conf.ImmutableClassesGiraphConfiguration;
 import org.apache.giraph.graph.GraphMapper;
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.ipc.Client;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.log4j.Logger;
 

@@ -436,7 +436,8 @@ public class GiraphYarnClient {
     ImmutableList.Builder<String> builder = ImmutableList.builder();
     builder.add("${JAVA_HOME}/bin/java ");
     if (giraphConf.applicationMasterDebugPort() != 0) {
-      builder.add("-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=" +
+      builder.add(
+          "-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=" +
           giraphConf.applicationMasterDebugPort() + " ");
     }
     builder.add(

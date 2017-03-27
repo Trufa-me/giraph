@@ -107,7 +107,7 @@ public class GiraphMetricsRegistry {
     if (graphiteHost.length() > 0) {
       String prefix = conf.metricsGraphitePrefix() + "." +
           conf.getInt("mapred.task.partition", 1);
-      GraphiteReporter.enable(registry, (long)conf.metricsGraphitePeriod(),
+      GraphiteReporter.enable(registry, (long) conf.metricsGraphitePeriod(),
           TimeUnit.SECONDS, graphiteHost, conf.metricsGraphitePort(),
           prefix);
     }

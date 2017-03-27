@@ -380,8 +380,11 @@ public interface GiraphConstants {
         "tasks)");
 
   /** Extra options to supply to the JVM when launching a task. */
-  StrConfOption EXTRA_JAVA_OPTIONS = new StrConfOption("giraph.extraJavaOptions", "",
-      "Extra options to supply to the JVM when launching a task.");
+  StrConfOption EXTRA_JAVA_OPTIONS = new StrConfOption(
+      "giraph.extraJavaOptions",
+      "",
+      "Extra options to supply to the JVM when launching a task."
+  );
 
   /** Vertex index class */
   ClassConfOption<WritableComparable> VERTEX_ID_CLASS =
@@ -521,6 +524,7 @@ public interface GiraphConstants {
       new StrConfOption("giraph.metrics.graphite.prefix", "",
           "The prefix for the Graphite metrics");
 
+  /** Remote debugging port */
   IntConfOption APPLICATION_MASTER_DEBUG_PORT =
       new IntConfOption("giraph.am.debug.port", 0,
           "Remote debug port for application master");

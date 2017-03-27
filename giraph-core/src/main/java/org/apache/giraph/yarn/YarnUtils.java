@@ -153,7 +153,8 @@ public class YarnUtils {
     FileStatus destStatus = fs.getFileStatus(target);
     resource.setResource(ConverterUtils.getYarnUrlFromURI(target.toUri()));
     resource.setSize(destStatus.getLen());
-    LOG.info("LocalResource access time " + destStatus.getAccessTime() + " modification time " + destStatus.getModificationTime());
+    LOG.info("LocalResource access time " + destStatus.getAccessTime() +
+        " modification time " + destStatus.getModificationTime());
     resource.setTimestamp(destStatus.getModificationTime());
     resource.setType(LocalResourceType.FILE); // use FILE, even for jars!
     resource.setVisibility(LocalResourceVisibility.APPLICATION);
