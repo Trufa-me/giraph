@@ -72,6 +72,7 @@ public final class ConfigurationUtils {
   /** Class logger */
   private static final Logger LOG =
     Logger.getLogger(ConfigurationUtils.class);
+  // CHECKSTYLE: stop JavadocVariable
 /*if[PURE_YARN]
   // The base path for output dirs as saved in GiraphConfiguration
   private static final Path BASE_OUTPUT_PATH;
@@ -84,6 +85,7 @@ public final class ConfigurationUtils {
     }
   }
 end[PURE_YARN]*/
+  // CHECKSTYLE: resume JavadocVariable
   /** Maintains our accepted options in case the caller wants to add some */
   private static Options OPTIONS;
 
