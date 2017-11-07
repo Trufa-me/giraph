@@ -54,7 +54,9 @@ public class BspInputFormat extends InputFormat<Text, Text> {
     int maxTasks = maxWorkers;
     // if this is a YARN job, separate ZK should already be running
     boolean isYarnJob = GiraphConstants.IS_PURE_YARN_JOB.get(conf);
-    if (splitMasterWorker && !isYarnJob) {
+    // fix for https://issues.apache.org/jira/browse/GIRAPH-811
+    // in yarn there's always 1 more task than the number of workers (the GiraphApplicationMaster)
+    if (isYarnJob || splitMasterWorker) {
       maxTasks += 1;
     }
     if (LOG.isDebugEnabled()) {
