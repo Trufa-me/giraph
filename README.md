@@ -1,3 +1,39 @@
+![giraph](giraph.png)
+
+# giraph
+
+This is a fork of the main Apache Giraph [github](https://github.com/apache/giraph) project with some changes
+specific to the Savanna pipeline project.
+
+## Changes
+
+* Support for more recent version of hadoop (required for EMR).
+* Support for pushing metrics to graphite.
+* Support for supplying additional JVM options to the ApplicationMaster, useful for, eg, remote debugging.
+* Fix for possible bug in the way that giraph publishes giraph-conf.xml into HDFS.
+* Add script for [jenkins](jenkins.sh) to publish to internal nexus.
+* Bugfix [GIRAPH-811](https://issues.apache.org/jira/browse/GIRAPH-811).
+
+## Building
+
+We only build the giraph-core library:
+
+    $ git checkout git@github.com:Trufa-me/giraph.git
+    $ cd giraph/giraph-core
+    $ mvn -Phadoop_yarn -Dhadoop.version=2.7.3 clean compile
+
+After building, the fatjar is in `target/giraph-1.3.0.2-SNAPSHOT-for-hadoop-2.7.3-jar-with-dependencies.jar`
+
+## Nexus
+
+The jenkins build publishes the jar to nexus with a separate classifier `savanna` so to include this in an
+sbt project, use:
+
+    "org.apache.giraph" % "giraph-core" % giraphVersion classifier "savanna"
+
+The original giraph README is below:
+
+<pre>
 Giraph : Large-scale graph processing on Hadoop
 
 Web and online social graphs have been rapidly growing in size and
@@ -211,4 +247,4 @@ counters one can use, which is set to 120 by default. This limit restricts the
 number of iterations/supersteps possible in Giraph. This limit can be increased
 by setting a parameter "mapreduce.job.counters.limit" in job tracker's config
 file mapred-site.xml.
-
+</pre>
