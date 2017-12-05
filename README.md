@@ -5,6 +5,12 @@
 This is a fork of the main Apache Giraph [github](https://github.com/apache/giraph) project with some changes
 specific to the Savanna pipeline project.
 
+All changes are on a branch, savanna.
+
+    $ git checkout git@github.com:Trufa-me/giraph.git
+    $ cd giraph
+    $ git checkout savanna
+
 ## Changes
 
 * Support for more recent version of hadoop (required for EMR).
@@ -18,8 +24,7 @@ specific to the Savanna pipeline project.
 
 We only build the giraph-core library:
 
-    $ git checkout git@github.com:Trufa-me/giraph.git
-    $ cd giraph/giraph-core
+    $ cd giraph-core
     $ mvn -Phadoop_yarn -Dhadoop.version=2.7.3 clean compile
 
 After building, the fatjar is in `target/giraph-1.3.0.2-SNAPSHOT-for-hadoop-2.7.3-jar-with-dependencies.jar`
